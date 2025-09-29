@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Up Game</title>
+</head>
+<body>
+  <h2>Form Top Up Game</h2>
+  <form id="topupForm">
+    <label>ID Game:</label><br>
+    <input type="text" id="gameId" required><br><br>
+
+    <label>Nama Game:</label><br>
+    <input type="text" id="game" required><br><br>
+
+    <label>Request Nominal:</label><br>
+    <input type="text" id="nominal" required><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById("topupForm");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const gameId = document.getElementById("gameId").value;
+      const game = document.getElementById("game").value;
+      const nominal = document.getElementById("nominal").value;
+
+      // Simpan ke LocalStorage
+      let data = { gameId, game, nominal };
+      localStorage.setItem("topupData", JSON.stringify(data));
+
+      // Nomor WhatsApp (ganti sesuai nomor kamu)
+      let nomor = "62083866020200"; // ganti dengan nomor penjual
+      let pesan = encodeURIComponent(
+        `Assalammualaikum Alby, saya mau top up:\nID: ${gameId}\nGame: ${game}\nRequest Nominal: ${nominal}`
+      );
+      let linkWA = `https://wa.me/${nomor}?text=${pesan}`;
+
+      // Redirect otomatis ke WhatsApp
+      window.location.href = linkWA;
+    });
+  </script>
+</body>
+</html>
