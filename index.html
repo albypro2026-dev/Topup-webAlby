@@ -3,49 +3,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top Up Game</title>
+  <title>Topup Game Alby</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #222;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 10px 0 5px;
+      text-align: left;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover {
+      background-color: #1ebe5a;
+    }
+    .game-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .game-option img {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
-  <h2>Form Top Up Game</h2>
-  <form id="topupForm">
-    <label>ID Game:</label><br>
-    <input type="text" id="gameId" required><br><br>
 
-    <label>Nama Game:</label><br>
-    <input type="text" id="game" required><br><br>
+  <div class="card">
+    <h2>Topup Game Alby</h2>
 
-    <label>Request Nominal:</label><br>
-    <input type="text" id="nominal" required><br><br>
+    <form onsubmit="kirimWhatsApp(event)">
+      <!-- Pilih Game -->
+      <label>Pilih Game:</label>
+      <select id="game" onchange="tampilkanForm()" required>
+        <option value="">-- Pilih Game --</option>
+        <option value="Free Fire">🔥 Free Fire</option>
+        <option value="Mobile Legends">⚔️ Mobile Legends</option>
+        <option value="PUBG Mobile">🔫 PUBG Mobile</option>
+        <option value="Genshin Impact">🌌 Genshin Impact</option>
+        <option value="Higgs Domino">🎲 Higgs Domino</option>
+        <option value="Call of Duty Mobile">🎯 Call of Duty Mobile</option>
+        <option value="Valorant">💥 Valorant</option>
+        <option value="Arena of Valor">🏹 Arena of Valor</option>
+        <option value="Clash of Clans">🏰 Clash of Clans</option>
+        <option value="Roblox">🕹️ Roblox</option>
+      </select>
 
-    <button type="submit">Submit</button>
-  </form>
+      <!-- ID Game umum -->
+      <div id="umumFields">
+        <label>ID Game:</label>
+        <input type="text" id="idgame" placeholder="Masukkan ID Game">
+      </div>
 
-  <p id="result"></p>
+      <!-- Mobile Legends khusus -->
+      <div id="mlFields" style="display:none;">
+        <label>ID Pemain:</label>
+        <input type="text" id="ml_id" placeholder="Contoh: 12345678">
+        
+        <label>ID Server:</label>
+        <input type="text" id="ml_server" placeholder="Contoh: 1234">
+        
+        <label>Nama Pemain:</label>
+        <input type="text" id="ml_nama" placeholder="Masukkan nama pemain">
+      </div>
+
+      <!-- Roblox khusus -->
+      <div id="robloxFields" style="display:none;">
+        <label>Nama Pengguna Roblox:</label>
+        <input type="text" id="roblox_nama" placeholder="Contoh: Alby123">
+      </div>
+
+      <!-- Nominal -->
+      <label>Request Nominal:</label>
+      <input type="text" id="nominal" placeholder="Contoh: 100 diamond" required>
+
+      <button type="submit">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="20"> 
+        Kirim ke WhatsApp
+      </button>
+    </form>
+  </div>
 
   <script>
-    const form = document.getElementById("topupForm");
+    function tampilkanForm() {
+      var game = document.getElementById("game").value;
+      var umumFields = document.getElementById("umumFields");
+      var mlFields = document.getElementById("mlFields");
+      var robloxFields = document.getElementById("robloxFields");
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
+      if (game === "Mobile Legends") {
+        umumFields.style.display = "none";
+        robloxFields.style.display = "none";
+        mlFields.style.display = "block";
+      } else if (game === "Roblox") {
+        umumFields.style.display = "none";
+        mlFields.style.display = "none";
+        robloxFields.style.display = "block";
+      } else {
+        mlFields.style.display = "none";
+        robloxFields.style.display = "none";
+        umumFields.style.display = "block";
+      }
+    }
 
-      const gameId = document.getElementById("gameId").value;
-      const game = document.getElementById("game").value;
-      const nominal = document.getElementById("nominal").value;
+    function kirimWhatsApp(event) {
+      event.preventDefault();
 
-      // Simpan ke LocalStorage
-      let data = { gameId, game, nominal };
-      localStorage.setItem("topupData", JSON.stringify(data));
+      var game = document.getElementById("game").value;
+      var nominal = document.getElementById("nominal").value;
+      var pesan = "Halo Admin, saya mau topup:\n\nGame: " + game + "\n";
 
-      // Nomor WhatsApp (ganti sesuai nomor kamu)
-      let nomor = "62083866020200"; // ganti dengan nomor penjual
-      let pesan = encodeURIComponent(
-        `Assalammualaikum Alby, saya mau top up:\nID: ${gameId}\nGame: ${game}\nRequest Nominal: ${nominal}`
-      );
-      let linkWA = `https://wa.me/${nomor}?text=${pesan}`;
+      if (game === "Mobile Legends") {
+        var id = document.getElementById("ml_id").value;
+        var server = document.getElementById("ml_server").value;
+        var nama = document.getElementById("ml_nama").value;
+        pesan += "ID Pemain: " + id + "\nServer: " + server + "\nNama: " + nama + "\n";
+      } else if (game === "Roblox") {
+        var namaRoblox = document.getElementById("roblox_nama").value;
+        pesan += "Username Roblox: " + namaRoblox + "\n";
+      } else {
+        var idgame = document.getElementById("idgame").value;
+        pesan += "ID: " + idgame + "\n";
+      }
 
-      // Redirect otomatis ke WhatsApp
-      window.location.href = linkWA;
-    });
+      pesan += "Nominal: " + nominal;
+
+      // Nomor WhatsApp kamu
+      var nomor = "62083866020200";  
+
+      var url = "https://wa.me/" + nomor + "?text=" + encodeURIComponent(pesan);
+      window.open(url, "_blank");
+    }
   </script>
+
 </body>
 </html>
