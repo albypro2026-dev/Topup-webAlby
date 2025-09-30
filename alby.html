@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Up Game - AlbyStore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+    }
+    h1 {
+      margin: 20px 0;
+      color: #333;
+    }
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 20px;
+    }
+    .game-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+    }
+    .game-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    .game-card p {
+      margin: 10px 0;
+      font-weight: bold;
+      color: #444;
+    }
+    form {
+      margin: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+    }
+    form input, form select, form button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form button {
+      background: #25d366; /* Hijau WhatsApp */
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    form button:hover {
+      background: #20b358; /* Hijau lebih gelap saat hover */
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="banner.png" alt="AlbyStore Banner">
+</header>
+
+<h1>Pilih Game untuk Top Up</h1>
+
+<div class="game-list">
+  <div class="game-card" onclick="showForm('Free Fire')">
+    <img src="ff.jpg" alt="Free Fire">
+    <p>Free Fire</p>
+  </div>
+  <div class="game-card" onclick="showForm('Mobile Legends')">
+    <img src="ml.jpg" alt="Mobile Legends">
+    <p>Mobile Legends</p>
+  </div>
+  <div class="game-card" onclick="showForm('PUBG Mobile')">
+    <img src="pubg.jpg" alt="PUBG Mobile">
+    <p>PUBG Mobile</p>
+  </div>
+  <div class="game-card" onclick="showForm('Roblox')">
+    <img src="roblox.jpg" alt="Roblox">
+    <p>Roblox</p>
+  </div>
+  <div class="game-card" onclick="showForm('Super Sus')">
+    <img src="supersus.jpg" alt="Super Sus">
+    <p>Super Sus</p>
+  </div>
+  <div class="game-card" onclick="showForm('Genshin Impact')">
+    <img src="genshin.jpg" alt="Genshin Impact">
+    <p>Genshin Impact</p>
+  </div>
+  <div class="game-card" onclick="showForm('Magic Chess')">
+    <img src="magicchess.jpg" alt="Magic Chess">
+    <p>Magic Chess</p>
+  </div>
+  <div class="game-card" onclick="showForm('Blood Strike')">
+    <img src="bloodstrike.jpg" alt="Blood Strike">
+    <p>Blood Strike</p>
+  </div>
+</div>
+
+<form id="topupForm">
+  <h2 id="gameTitle">Top Up</h2>
+  <input type="text" id="playerId" placeholder="Masukkan ID Pemain" required>
+  <input type="text" id="serverId" placeholder="Masukkan ID Server (jika ada)">
+  <input type="text" id="username" placeholder="Masukkan Nama Pemain / Username">
+  <select id="nominal" required>
+    <option value="">Pilih Nominal</option>
+    <option value="5 Diamonds">5 Diamonds</option>
+    <option value="20 Diamonds">20 Diamonds</option>
+    <option value="50 Diamonds">50 Diamonds</option>
+    <option value="Request Penjual">Request Penjual</option>
+  </select>
+  <button type="button" onclick="sendToWhatsApp()">Kirim ke WhatsApp</button>
+</form>
+
+<script>
+  let selectedGame = "";
+
+  function showForm(game) {
+    selectedGame = game;
+    document.getElementById("gameTitle").innerText = "Top Up " + game;
+    document.getElementById("topupForm").style.display = "block";
+
+    // Kalau Roblox, hanya username + nominal
+    if (game === "Roblox") {
+      document.getElementById("playerId").style.display = "none";
+      document.getElementById("serverId").style.display = "none";
+    } else {
+      document.getElementById("playerId").style.display = "block";
+      document.getElementById("serverId").style.display = "block";
+    }
+
+    // Scroll otomatis ke form
+    document.getElementById("topupForm").scrollIntoView({behavior: "smooth"});
+  }
+
+  function sendToWhatsApp() {
+    let playerId = document.getElementById("playerId").value;
+    let serverId = document.getElementById("serverId").value;
+    let username = document.getElementById("username").value;
+    let nominal = document.getElementById("nominal").value;
+
+    let message = `Assalamu'alaikum Alby, bade top up😁🙌.\nGame: ${selectedGame}\n`;
+
+    if (selectedGame === "Roblox") {
+      message += `Username: ${username}\n`;
+    } else {
+      message += `ID Pemain: ${playerId}\nServer: ${serverId}\nNama: ${username}\n`;
+    }
+
+    message += `Nominal: ${nominal}`;
+
+    let phone = "62083866020200"; // nomor tujuan
+    let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+</script>
+
+</body>
+</html>
